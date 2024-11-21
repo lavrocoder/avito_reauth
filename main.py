@@ -42,6 +42,13 @@ def main():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
+    options.add_argument("--disable-webgl")  # Отключить WebGL
+    options.add_argument("--log-level=3")  # Уровень логирования (0=ALL, 1=DEBUG, 2=INFO, 3=WARNING, 4=ERROR, 5=FATAL)
+    options.add_argument("--ignore-certificate-errors")  # Игнорировать ошибки SSL
+    options.add_argument("--disable-logging")  # Отключить логи
+    # Отключение лишних логов
+    options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-blink-features"])
+
     driver = webdriver.Chrome(options=options)
     try:
         driver.maximize_window()
