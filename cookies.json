@@ -14,7 +14,7 @@
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1763634917.865932,
+        "expirationDate": 1763722043.664909,
         "hostOnly": false,
         "httpOnly": true,
         "name": "rt",
@@ -23,11 +23,11 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "0117dea70461aa9751dc9b4e41f28f92"
+        "value": "19b5f319b000600b965bb982c8f743fa"
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1732173494,
+        "expirationDate": 1732262454,
         "hostOnly": false,
         "httpOnly": false,
         "name": "ft",
@@ -36,7 +36,7 @@
         "secure": false,
         "session": false,
         "storeId": null,
-        "value": "\"5VYaL45Z6KggPHttVI+JsuiK0m16BydYQViEoDBbge37s4WEOkZQOudaLnz9Bqwlhkxk/pOM51i0pWetPCJR9Gd81jdhR+TWZYHAwEVB+UKpMyiRWeEsUtG30wo/0FB9DtmLjgaC/ZzDRQeWXrt/x1cR0EIMty28gpUAGOduSng3UfSdtcYQCxPxRtYI2s87\""
+        "value": "\"z/3uZEa/aayf3eSzjulwt+vg/ZJAU3Yfqkk0Z0EXJ5TMXBUqgfBkRleB47lHppITlt1XD4zVTAfIe5c3sIYUSPtUIh701wpvBwUsKoaFicY2rXF3C59acRARWsEB26uYL/ZPnKfmwbUVSqb2OyNpOSlwXriv/yy+DX4ne8PBtgYFlkDlB2HfYFjSJ4fXsk2b\""
     },
     {
         "domain": ".www.avito.ru",
@@ -92,7 +92,7 @@
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1732173494,
+        "expirationDate": 1732262454,
         "hostOnly": false,
         "httpOnly": false,
         "name": "f",
@@ -101,7 +101,7 @@
         "secure": false,
         "session": false,
         "storeId": null,
-        "value": "5.0c4f4b6d233fb90636b4dd61b04726f1a816010d61a371dda816010d61a371dda816010d61a371dda816010d61a371ddbb0992c943830ce0bb0992c943830ce0bb0992c943830ce0a816010d61a371dd2668c76b1faaa358bb0992c943830ce00df103df0c26013a7b0d53c7afc06d0b2ebf3cb6fd35a0ac0df103df0c26013a8b1472fe2f9ba6b9c99dece94c5a563168e2978c700f15b6831064c92d93c3903815369ae2d1a81d4e0d8a280d6b65f00df103df0c26013aba0ac8037e2b74f9268a7bf63aa148d20df103df0c26013a8b1472fe2f9ba6b97b0d53c7afc06d0b71e7cb57bbcb8e0f03c77801b122405c03c77801b122405c03c77801b122405c2ebf3cb6fd35a0ac20f3d16ad0b1c546b892c6c84ad16848a9b4102d42ade879dcb5a55b9498f64296665315bb87dc5947c4f168f61095cfb1ea5628bcd6ced05b3243d00e50f4de4525907271a6a0eb5d9b6181852218c02ab459296b57b13791e52da22a560f550df103df0c26013a0df103df0c26013aaaa2b79c1ae9259563f566cd6414b909c1ab67354932b4193de19da9ed218fe2cd39050aceac4b90602b3d84588af7f5b8e2d248a915a78f059080ed9becc4cd"
+        "value": "5.0c4f4b6d233fb90636b4dd61b04726f1a816010d61a371dda816010d61a371dda816010d61a371dda816010d61a371ddbb0992c943830ce0bb0992c943830ce0bb0992c943830ce0a816010d61a371dd2668c76b1faaa358bb0992c943830ce00df103df0c26013a7b0d53c7afc06d0b2ebf3cb6fd35a0ac0df103df0c26013a8b1472fe2f9ba6b9c99dece94c5a563168e2978c700f15b6831064c92d93c3903815369ae2d1a81d4e0d8a280d6b65f00df103df0c26013aba0ac8037e2b74f9268a7bf63aa148d20df103df0c26013a8b1472fe2f9ba6b97b0d53c7afc06d0b71e7cb57bbcb8e0f03c77801b122405c03c77801b122405c03c77801b122405c2ebf3cb6fd35a0ac20f3d16ad0b1c546b892c6c84ad16848a9b4102d42ade879dcb5a55b9498f64296665315bb87dc5947c4f168f61095cf0dd71febbb33a38ad1a78c62742b5d844525907271a6a0eb5d9b6181852218c02ab459296b57b13791e52da22a560f550df103df0c26013a0df103df0c26013aaaa2b79c1ae925957205e88d94e49650162e670eb872b6873de19da9ed218fe2cd39050aceac4b90602b3d84588af7f5b8e2d248a915a78f059080ed9becc4cd"
     },
     {
         "domain": "www.avito.ru",
@@ -209,19 +209,6 @@
     },
     {
         "domain": "www.avito.ru",
-        "expirationDate": 1732169235.793545,
-        "hostOnly": true,
-        "httpOnly": false,
-        "name": "cartCounter",
-        "path": "/",
-        "sameSite": null,
-        "secure": false,
-        "session": false,
-        "storeId": null,
-        "value": "0"
-    },
-    {
-        "domain": "www.avito.ru",
         "expirationDate": 1763634918.089694,
         "hostOnly": true,
         "httpOnly": false,
@@ -235,7 +222,7 @@
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1732255336.073125,
+        "expirationDate": 1732276459.403807,
         "hostOnly": false,
         "httpOnly": true,
         "name": "gMltIuegZN2COuSe",
@@ -248,20 +235,7 @@
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1732173492.225944,
-        "hostOnly": false,
-        "httpOnly": true,
-        "name": "luri",
-        "path": "/",
-        "sameSite": "lax",
-        "secure": true,
-        "session": false,
-        "storeId": null,
-        "value": "barnaul"
-    },
-    {
-        "domain": ".avito.ru",
-        "expirationDate": 1763634917.865907,
+        "expirationDate": 1763722043.664887,
         "hostOnly": false,
         "httpOnly": true,
         "name": "sessid",
@@ -270,7 +244,7 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJwIjozMDM4MDI5ODMsInYiOmZhbHNlLCJleHRyYSI6bnVsbCwiZXhwIjoxNzMyMTg1MzA1LCJpYXQiOjE3MzIwOTg5MDUsInMiOiJlNzI3NDEyMDM1NWMxNDNkYjc3M2UzNDBkNjY4OWEwNy4xNzMyMDk4OTA1IiwiaCI6IjAxMGM4NWQwMDk5ZTE3NzU4YmNmMTJjZmRjNzRiNmE5XzE3MzIwOTg5MDUiLCJ1IjozNzI5NTM2MzN9.wgATS5JsEJYajmDjKWXBzAZns-fvZVCw48Auir8PnOKmvU6W5xD_O61b5w5Uwb5pg5il2khzVzlXWq_-pZDGBQ"
+        "value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJwIjozMDM4MDI5ODMsInYiOm51bGwsImV4dHJhIjpudWxsLCJleHAiOjE3MzIyNzI0MzEsImlhdCI6MTczMjE4NjAzMSwicyI6IjJkNDFjZGJjM2ZmYTQ0NGJjOGFhMzAxZTBkMzc1NDhhLjE3MzIxODYwMzEiLCJoIjoiMGY2MTRjYzU5ZGJiNTU2YzIxM2UxZjlmMGZiZjU4MjRfMTczMjE4NjAzMSIsInUiOjM3Mjk1MzYzM30.FWvAtOfdaF8g1ma-k59AQEfVx-Mi98hVcP1dKqVrNslzs17CdlQZyzEwSDnvDpwLADk3-5JSLic7NEBaXoQxgQ"
     },
     {
         "domain": ".avito.ru",
@@ -300,7 +274,7 @@
     },
     {
         "domain": ".avito.ru",
-        "expirationDate": 1732170738.731063,
+        "expirationDate": 1732191859.413272,
         "hostOnly": false,
         "httpOnly": true,
         "name": "v",
@@ -309,6 +283,19 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "1732168923"
+        "value": "1732183800"
+    },
+    {
+        "domain": "www.avito.ru",
+        "expirationDate": 1732190359.40569,
+        "hostOnly": true,
+        "httpOnly": false,
+        "name": "cartCounter",
+        "path": "/",
+        "sameSite": null,
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "0"
     }
 ]
