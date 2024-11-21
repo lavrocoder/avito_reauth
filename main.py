@@ -9,6 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent
 
 PROFILES_PATH = BASE_DIR / 'profiles'
 
+PROFILES_PATH.mkdir(exist_ok=True)
+
 
 def load_cookies(path: str) -> list[dict]:
     with open(path, 'r', encoding='utf-8') as f:
