@@ -1,1 +1,5 @@
 /profiles/
+/cookies/
+/.idea/
+/.venv/
+/venv/

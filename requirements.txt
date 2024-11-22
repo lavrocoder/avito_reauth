@@ -1,3 +1,7 @@
 selenium
 fastapi
 uvicorn
+celery
+redis
+flower
+requests
