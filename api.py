@@ -21,10 +21,16 @@ celery = Celery(
 )
 
 
+@app.post("/update-cookies/all")
+def update_cookies():
+    task = celery.send_task('tasks.update_all_cookies')
+    return {"task_id": task.id, "status": "ok"}
+
+
 @app.post("/update-cookies/{profile_id}")
 def update_cookies(profile_id: str):
     task = celery.send_task('tasks.update_cookies', args=[profile_id])
-    return {"task_id": task.id, "status": "Task submitted"}
+    return {"task_id": task.id, "status": "ok"}
 
 
 @app.post("/send-cookies/{profile_id}")

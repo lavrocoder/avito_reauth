@@ -3,3 +3,7 @@
 /.idea/
 /.venv/
 /venv/
+/temp/
+/.ssh/
+/cookies_aliases.json
+/servers.json

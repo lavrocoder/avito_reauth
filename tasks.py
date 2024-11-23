@@ -1,9 +1,11 @@
+import json
 import os
+import shutil
 
 from celery import Celery
 
-from config import PROFILES_PATH
-from helpers import start_driver
+from config import PROFILES_PATH, TEMP_PATH, SSH_PATH, ALIASES_PATH, SERVERS_PATH
+from helpers import start_driver, send_files_via_sftp
 
 redis_host = os.getenv("REDIS_HOST", "localhost")
 redis_port = os.getenv("REDIS_PORT", 6379)
@@ -31,3 +33,97 @@ def update_cookies(profile_id):
     finally:
         driver.close()
         driver.quit()
+
+
+@celery.task(name='tasks.update_all_cookies')
+def update_all_cookies():
+    # Загружаем алиасы профилей
+    with open(ALIASES_PATH, 'r', encoding='utf-8') as f:
+        aliases = json.loads(f.read())
+
+    # Загружаем доступы к серверам
+    with open(SERVERS_PATH, 'r', encoding='utf-8') as f:
+        servers = json.loads(f.read())
+
+    # Удаляем старую папку
+    if TEMP_PATH.exists() and TEMP_PATH.is_dir():
+        shutil.rmtree(TEMP_PATH)
+    # Создаём новую папку
+    TEMP_PATH.mkdir()
+
+    # Получаем все cookies
+    profiles = os.listdir(PROFILES_PATH)
+    for profile in profiles:
+        cookies = update_cookies(profile)
+        with open(TEMP_PATH / f'{profile}.json', 'w', encoding='utf-8') as f:
+            f.write(json.dumps(cookies, ensure_ascii=False, indent=4))
+
+    # Обновляем cookies на серверах
+    # Центральный сервер
+    for server in servers:
+        if server.get('type') != 'central':
+            continue
+        files = []
+        for file in os.listdir(TEMP_PATH):
+            alias = aliases.get(file, file)
+            files.append(
+                [
+                    str(TEMP_PATH / file),
+                    f'/home/www/code/avito_analytics/accounts/{alias}'
+                ]
+            )
+        files.append(
+            [
+                str(TEMP_PATH, '10.json'),
+                '/home/www/code/avito_analytics/cookies/cookie.json'
+            ]
+        )
+        send_files_via_sftp(server['ip'], server['user'], server['ssh_key'], files)
+
+    # Потоки
+    for server in servers:
+        if server.get('type') != 'flow':
+            continue
+
+        files = []
+        for file in os.listdir(TEMP_PATH):
+            alias = aliases.get(file, file)
+            files.append(
+                [
+                    str(TEMP_PATH / file),
+                    f'/home/www/code/avito_analytics_flows/avito_analytics_flow1/accounts/{alias}'
+                ]
+            )
+            files.append(
+                [
+                    str(TEMP_PATH / file),
+                    f'/home/www/code/avito_analytics_flows/avito_analytics_flow2/accounts/{alias}'
+                ]
+            )
+            files.append(
+                [
+                    str(TEMP_PATH / file),
+                    f'/home/www/code/avito_analytics_flows/avito_analytics_flow3/accounts/{alias}'
+                ]
+            )
+        files.append(
+            [
+                str(TEMP_PATH, '10.json'),
+                '/home/www/code/avito_analytics_flows/avito_analytics_flow1/cookies/cookie.json'
+            ]
+        )
+        files.append(
+            [
+                str(TEMP_PATH, '10.json'),
+                '/home/www/code/avito_analytics_flows/avito_analytics_flow2/cookies/cookie.json'
+            ]
+        )
+        files.append(
+            [
+                str(TEMP_PATH, '10.json'),
+                '/home/www/code/avito_analytics_flows/avito_analytics_flow3/cookies/cookie.json'
+            ]
+        )
+
+        send_files_via_sftp(server['ip'], server['user'], server['ssh_key'], files)
+    return 'complete'

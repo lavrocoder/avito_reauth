@@ -1,3 +1,5 @@
+import pysftp
+from loguru import logger
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -22,3 +24,31 @@ def start_driver(profile_path, cache_path):
 
     driver = webdriver.Chrome(options=options)
     return driver
+
+
+def send_files_via_sftp(ip: str, username: str, private_key_path: str, files: list[list[str]]) -> list[bool]:
+    """
+    Отправляет файлы на сервер по sftp.
+    :param ip: IP адрес сервера, куда отправить файлы.
+    :param username: Имя пользователя на сервере через которого нужно зайти.
+    :param private_key_path: Путь к приватному ключу.
+    :param files: Список, в котором каждый элемент - это список из 2-х полных путей:
+                    1 - локальный путь к файлу;
+                    2 - путь к файлу на сервере.
+    :return: Список результатов отправки для каждого файла
+    """
+    results = []
+    with pysftp.Connection(ip, username=username, private_key=private_key_path) as sftp:
+        logger.debug(f'Connected to SFTP server: {ip}')
+        for file in files:
+            logger.debug(f'Sending file: {file}')
+            try:
+                sftp.put(file[0], file[1])
+                logger.debug(f'File sent: {file[0]}')
+                results.append(True)
+            except Exception as e:
+                logger.error(f'Failed to send file: {file[0]}')
+                logger.opt(exception=True).error(e)
+                results.append(False)
+    logger.debug(f'{results=}')
+    return results
