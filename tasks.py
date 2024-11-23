@@ -74,7 +74,7 @@ def update_all_cookies():
             )
         files.append(
             [
-                str(TEMP_PATH, '10.json'),
+                str(TEMP_PATH / '10.json'),
                 '/home/www/code/avito_analytics/cookies/cookie.json'
             ]
         )
@@ -108,19 +108,19 @@ def update_all_cookies():
             )
         files.append(
             [
-                str(TEMP_PATH, '10.json'),
+                str(TEMP_PATH / '10.json'),
                 '/home/www/code/avito_analytics_flows/avito_analytics_flow1/cookies/cookie.json'
             ]
         )
         files.append(
             [
-                str(TEMP_PATH, '10.json'),
+                str(TEMP_PATH / '10.json'),
                 '/home/www/code/avito_analytics_flows/avito_analytics_flow2/cookies/cookie.json'
             ]
         )
         files.append(
             [
-                str(TEMP_PATH, '10.json'),
+                str(TEMP_PATH / '10.json'),
                 '/home/www/code/avito_analytics_flows/avito_analytics_flow3/cookies/cookie.json'
             ]
         )
