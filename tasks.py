@@ -78,7 +78,7 @@ def update_all_cookies():
                 '/home/www/code/avito_analytics/cookies/cookie.json'
             ]
         )
-        send_files_via_sftp(server['ip'], server['user'], server['ssh_key'], files)
+        send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
 
     # Потоки
     for server in servers:
@@ -125,5 +125,5 @@ def update_all_cookies():
             ]
         )
 
-        send_files_via_sftp(server['ip'], server['user'], server['ssh_key'], files)
+        send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
     return 'complete'
