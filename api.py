@@ -1,7 +1,7 @@
 import json
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 
 from celery import Celery
 
@@ -19,6 +19,17 @@ celery = Celery(
     broker=f'redis://{redis_host}:{redis_port}/0',
     backend=f'redis://{redis_host}:{redis_port}/0'
 )
+
+# ALLOWED_IPS = {"127.0.0.1", "192.168.0.1"}  # Разрешённые IP-адреса
+#
+#
+# @app.middleware("http")
+# async def check_ip_middleware(request: Request, call_next):
+#     client_ip = request.client.host
+#     if client_ip not in ALLOWED_IPS:
+#         raise HTTPException(status_code=403, detail="Access forbidden: Your IP is not allowed")
+#     response = await call_next(request)
+#     return response
 
 
 @app.post("/update-cookies/all")

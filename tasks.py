@@ -19,6 +19,7 @@ celery = Celery(
 
 @celery.task(name='tasks.update_cookies')
 def update_cookies(profile_id):
+    status = False
     if not os.path.exists(PROFILES_PATH / profile_id):
         raise Exception(f'Profile {profile_id} does not exist')
     profile_path = os.path.join(PROFILES_PATH, profile_id, 'profile')
@@ -29,7 +30,10 @@ def update_cookies(profile_id):
         driver.maximize_window()
         driver.get('https://www.avito.ru/analytics')
         cookies = driver.get_cookies()
-        return cookies
+        current_url = driver.current_url
+        if 'https://www.avito.ru/analytics' in current_url:
+            status = True
+        return {"status": status, "cookies": cookies}
     finally:
         driver.close()
         driver.quit()
@@ -37,6 +41,7 @@ def update_cookies(profile_id):
 
 @celery.task(name='tasks.update_all_cookies')
 def update_all_cookies():
+    statuses = []
     # Загружаем алиасы профилей
     with open(ALIASES_PATH, 'r', encoding='utf-8') as f:
         aliases = json.loads(f.read())
@@ -54,7 +59,9 @@ def update_all_cookies():
     # Получаем все cookies
     profiles = os.listdir(PROFILES_PATH)
     for profile in profiles:
-        cookies = update_cookies(profile)
+        data = update_cookies(profile)
+        cookies = data['cookies']
+        statuses.append(data['status'])
         with open(TEMP_PATH / f'{profile}.json', 'w', encoding='utf-8') as f:
             f.write(json.dumps(cookies, ensure_ascii=False, indent=4))
 
@@ -126,4 +133,4 @@ def update_all_cookies():
         )
 
         send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
-    return 'complete'
+    return f"{statuses.count(True)}/{len(statuses)}"
