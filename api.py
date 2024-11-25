@@ -2,6 +2,8 @@ import json
 import os
 
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 
 from celery import Celery
 
@@ -30,6 +32,21 @@ celery = Celery(
 #         raise HTTPException(status_code=403, detail="Access forbidden: Your IP is not allowed")
 #     response = await call_next(request)
 #     return response
+
+static_folder = "cookies"
+app.mount("/cookies", StaticFiles(directory="cookies"), name="cookies")
+
+
+@app.get("/cookies")
+async def list_cookies():
+    try:
+        # Получаем список файлов в папке
+        files = os.listdir(static_folder)
+        # Фильтруем только файлы (исключаем папки)
+        files = [f for f in files if os.path.isfile(os.path.join(static_folder, f))]
+        return JSONResponse(content={"files": files})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
 @app.post("/update-cookies/all")
