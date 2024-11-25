@@ -133,4 +133,14 @@ def update_all_cookies():
         )
 
         send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
-    return f"{statuses.count(True)}/{len(statuses)}"
+
+    result = f"{statuses.count(True)}/{len(statuses)}"
+    if statuses.count(True) < len(statuses):
+        errors = []
+        for i, status in enumerate(statuses):
+            if not status:
+                errors.append(profiles[i])
+        errors = ", ".join(errors)
+        result = f'{result} (errors: {errors})'
+
+    return result
