@@ -61,6 +61,12 @@ def update_cookies(profile_id: str):
     return {"task_id": task.id, "status": "ok"}
 
 
+@app.post("/update-cookies-by-file-name/{file_name}")
+def update_cookies(file_name: str):
+    task = celery.send_task('tasks.update_cookies_with_update_file', args=[file_name])
+    return {"task_id": task.id, "status": "ok"}
+
+
 @app.post("/send-cookies/{profile_id}")
 def send_cookies(profile_id: str, data: dict):
     profile_path = COOKIES_PATH / f"{profile_id}.json"

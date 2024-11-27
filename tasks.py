@@ -144,3 +144,69 @@ def update_all_cookies():
         result = f'{result} (errors: {errors})'
 
     return result
+
+
+@celery.task(name='tasks.update_cookies_with_update_file')
+def update_cookies_with_update_file(file_name: str):
+    # Загружаем алиасы профилей
+    with open(ALIASES_PATH, 'r', encoding='utf-8') as f:
+        aliases = json.loads(f.read())
+
+    aliases = {value: key for key, value in aliases.items()}
+    file: str = aliases.get(file_name)
+    if file is None:
+        raise Exception(f'File {file_name} not found')
+
+    # Загружаем доступы к серверам
+    with open(SERVERS_PATH, 'r', encoding='utf-8') as f:
+        servers = json.loads(f.read())
+
+    # Удаляем старую папку
+    if TEMP_PATH.exists() and TEMP_PATH.is_dir():
+        shutil.rmtree(TEMP_PATH)
+    # Создаём новую папку
+    TEMP_PATH.mkdir()
+
+    profile_id = file.split('.')[0]
+    data = update_cookies(profile_id)
+
+    cookies = data['cookies']
+    status = data['status']
+    if not status:
+        # :TODO: Отправить уведомление, что не удалось войти в аккаунт
+        raise Exception("Authorization error")
+
+    with open(TEMP_PATH / f'{profile_id}.json', 'w', encoding='utf-8') as f:
+        f.write(json.dumps(cookies, ensure_ascii=False, indent=4))
+
+    for server in servers:
+        if server.get('type') != 'central':
+            continue
+        files = [
+            [
+                str(TEMP_PATH / f'{profile_id}.json'),
+                f'/home/www/code/avito_analytics/accounts/{file_name}'
+            ]
+        ]
+
+        send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
+
+    for server in servers:
+        if server.get('type') != 'flow':
+            continue
+        files = [
+            [
+                str(TEMP_PATH / f'{profile_id}.json'),
+                f'/home/www/code/avito_analytics_flows/avito_analytics_flow1/accounts/{file_name}'
+            ],
+            [
+                str(TEMP_PATH / f'{profile_id}.json'),
+                f'/home/www/code/avito_analytics_flows/avito_analytics_flow2/accounts/{file_name}'
+            ],
+            [
+                str(TEMP_PATH / f'{profile_id}.json'),
+                f'/home/www/code/avito_analytics_flows/avito_analytics_flow3/accounts/{file_name}'
+            ]
+        ]
+
+        send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
