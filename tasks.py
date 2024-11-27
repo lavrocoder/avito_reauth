@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 
+import requests
 from celery import Celery
 from bs4 import BeautifulSoup
 
@@ -221,3 +222,7 @@ def update_cookies_with_update_file(file_name: str):
         ]
 
         send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
+
+    requests.post("https://analytics.qqrooza.ru/api/cookies-updated/", params={"file_name": file_name})
+
+    return status
