@@ -3,6 +3,7 @@ import os
 import shutil
 
 from celery import Celery
+from bs4 import BeautifulSoup
 
 from config import PROFILES_PATH, TEMP_PATH, SSH_PATH, ALIASES_PATH, SERVERS_PATH
 from helpers import start_driver, send_files_via_sftp
@@ -19,7 +20,6 @@ celery = Celery(
 
 @celery.task(name='tasks.update_cookies')
 def update_cookies(profile_id):
-    status = False
     if not os.path.exists(PROFILES_PATH / profile_id):
         raise Exception(f'Profile {profile_id} does not exist')
     profile_path = os.path.join(PROFILES_PATH, profile_id, 'profile')
@@ -32,7 +32,14 @@ def update_cookies(profile_id):
         cookies = driver.get_cookies()
         current_url = driver.current_url
         if 'https://www.avito.ru/analytics' in current_url:
-            status = True
+            status = "ok"
+            html_code = driver.page_source
+            soup = BeautifulSoup(html_code, "html.parser")
+            element = soup.find("h2", class_="firewall-title")
+            if element:
+                status = "ip ban"
+        else:
+            status = "not authorized"
         return {"status": status, "cookies": cookies}
     finally:
         driver.close()
@@ -134,12 +141,12 @@ def update_all_cookies():
 
         send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
 
-    result = f"{statuses.count(True)}/{len(statuses)}"
-    if statuses.count(True) < len(statuses):
+    result = f"{statuses.count('ok')}/{len(statuses)}"
+    if statuses.count('ok') < len(statuses):
         errors = []
         for i, status in enumerate(statuses):
-            if not status:
-                errors.append(profiles[i])
+            if status != 'ok':
+                errors.append(f"{profiles[i]}: {status}")
         errors = ", ".join(errors)
         result = f'{result} (errors: {errors})'
 
@@ -172,9 +179,13 @@ def update_cookies_with_update_file(file_name: str):
 
     cookies = data['cookies']
     status = data['status']
-    if not status:
-        # :TODO: Отправить уведомление, что не удалось войти в аккаунт
-        raise Exception("Authorization error")
+    if status != 'ok':
+        if status == 'not authorized':
+            # :TODO: Отправить уведомление, что не удалось войти в аккаунт
+            raise Exception("Authorization error")
+        if status == 'ip ban':
+            # :TODO: Отправить уведомление, что Ip адрес заблокирован
+            raise Exception("IP ban")
 
     with open(TEMP_PATH / f'{profile_id}.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(cookies, ensure_ascii=False, indent=4))
