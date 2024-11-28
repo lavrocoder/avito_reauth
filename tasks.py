@@ -5,6 +5,7 @@ import shutil
 import requests
 from celery import Celery
 from bs4 import BeautifulSoup
+from loguru import logger
 
 from config import PROFILES_PATH, TEMP_PATH, SSH_PATH, ALIASES_PATH, SERVERS_PATH
 from helpers import start_driver, send_files_via_sftp
@@ -66,12 +67,15 @@ def update_all_cookies():
 
     # Получаем все cookies
     profiles = os.listdir(PROFILES_PATH)
+    updated_cookies = []
     for profile in profiles:
         data = update_cookies(profile)
         cookies = data['cookies']
         statuses.append(data['status'])
         with open(TEMP_PATH / f'{profile}.json', 'w', encoding='utf-8') as f:
             f.write(json.dumps(cookies, ensure_ascii=False, indent=4))
+        if data['status'] == 'ok':
+            updated_cookies.append(f'{profile}.json')
 
     # Обновляем cookies на серверах
     # Центральный сервер
@@ -141,6 +145,13 @@ def update_all_cookies():
         )
 
         send_files_via_sftp(server['ip'], server['user'], str(SSH_PATH / server['ssh_key']), files)
+
+    for file in updated_cookies:
+        alias = aliases.get(file, file)
+        try:
+            requests.post("https://analytics.qqrooza.ru/api/cookies-updated/", params={"file_name": alias})
+        except Exception as e:
+            logger.opt(exception=True).error(e)
 
     result = f"{statuses.count('ok')}/{len(statuses)}"
     if statuses.count('ok') < len(statuses):
