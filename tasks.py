@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import time
 
 import requests
 from celery import Celery
@@ -30,7 +31,17 @@ def update_cookies(profile_id):
     driver = start_driver(profile_path, cache_path)
     try:
         driver.maximize_window()
-        driver.get('https://www.avito.ru/analytics')
+        n = 5
+        for i in range(n):
+            try:
+                driver.get('https://www.avito.ru/analytics')
+            except Exception as e:
+                if n - 1 == i:
+                    raise e
+                logger.opt(exception=True).warning(e)
+                time.sleep(10)
+            else:
+                break
         cookies = driver.get_cookies()
         current_url = driver.current_url
         if 'https://www.avito.ru/analytics' in current_url:
