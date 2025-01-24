@@ -21,5 +21,5 @@ celery -A tasks flower
 ```
 
 ```shell
-ceelery -A tasks worker --loglevel=info --pool=solo
+celery -A tasks worker --loglevel=info --pool=solo
 ```
