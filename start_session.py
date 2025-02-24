@@ -33,11 +33,19 @@ def main():
 
     driver = start_driver(profile_path, cache_path)
     try:
-        driver.maximize_window()
+        try:
+            driver.maximize_window()
+        except Exception as e:
+            print("Не удалось максимизировать окно")
+            print(e)
         driver.get('https://www.avito.ru')
         input("Enter to close: ")
     finally:
-        driver.close()
+        try:
+            driver.close()
+        except Exception as e:
+            print(f'При закрытии окна произошла ошибка')
+            print(e)
         driver.quit()
 
 
