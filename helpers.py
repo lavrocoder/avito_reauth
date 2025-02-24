@@ -1,11 +1,21 @@
+import json
+import os
+from pathlib import Path
+
 import pysftp
 from loguru import logger
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-def start_driver(profile_path, cache_path):
+def start_driver(profile_path, cache_path, browser_file_path):
+    url = 'https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/win64/chrome-win64.zip'
+    if not browser_file_path.exists():
+        print(f"Добавьте файл {browser_file_path}, его можно скачать по ссылке {url}")
+        return None
+
     options = Options()
+    options.binary_location = browser_file_path
     options.add_argument(f"user-data-dir={profile_path}")
     options.add_argument("disk-cache-size=104857600")
     options.add_argument("media-cache-size=104857600")
@@ -52,3 +62,18 @@ def send_files_via_sftp(ip: str, username: str, private_key_path: str, files: li
                 results.append(False)
     logger.debug(f'{results=}')
     return results
+
+
+def load_cookies(path: str) -> list[dict]:
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.loads(f.read())
+
+
+def get_profile(path: Path) -> str:
+    dirs = os.listdir(path)
+    dirs_txt = "\n".join(dirs)
+    print(f"Выбери профиль или создайте новый: \n{dirs_txt}")
+    select_dir = input(">>> ")
+    if select_dir not in dirs:
+        os.mkdir(os.path.join(path, select_dir))
+    return os.path.join(path, select_dir)

@@ -1,8 +1,8 @@
 import os
 import shutil
 
-from helpers import start_driver
-from start_session import get_profile, PROFILES_PATH
+from helpers import start_driver, get_profile
+from start_session import PROFILES_PATH
 
 
 def remove_extensions(profile_path):
