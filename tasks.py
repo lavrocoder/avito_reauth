@@ -10,6 +10,7 @@ from loguru import logger
 
 from config import PROFILES_PATH, TEMP_PATH, SSH_PATH, ALIASES_PATH, SERVERS_PATH
 from helpers import start_driver, send_files_via_sftp
+from start_session import BROWSER_FILE_PATH
 
 redis_host = os.getenv("REDIS_HOST", "localhost")
 redis_port = os.getenv("REDIS_PORT", 6379)
@@ -28,7 +29,7 @@ def update_cookies(profile_id):
     profile_path = os.path.join(PROFILES_PATH, profile_id, 'profile')
     cache_path = os.path.join(PROFILES_PATH, profile_id, 'cache')
 
-    driver = start_driver(profile_path, cache_path)
+    driver = start_driver(profile_path, cache_path, BROWSER_FILE_PATH)
     try:
         driver.maximize_window()
         n = 5
