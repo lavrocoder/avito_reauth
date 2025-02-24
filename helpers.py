@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.options import Options
 def start_driver(profile_path, cache_path, browser_file_path):
     url = 'https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/win64/chrome-win64.zip'
     if not browser_file_path.exists():
-        print(f"Добавьте файл {browser_file_path}, его можно скачать по ссылке {url}")
+        print(f"Добавьте папку {browser_file_path.parent}, её можно скачать по ссылке {url}")
         return None
 
     options = Options()

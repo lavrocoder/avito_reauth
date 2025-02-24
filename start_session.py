@@ -13,8 +13,7 @@ BROWSER_PATH = BASE_DIR / 'browser'
 
 BROWSER_PATH.mkdir(exist_ok=True)
 
-BROWSER_FILE_PATH = BROWSER_PATH / 'chrome.exe'
-BROWSER_FILE_PATH.exists()
+BROWSER_FILE_PATH = BROWSER_PATH / 'chrome-win64' / 'chrome.exe'
 
 
 def main():
