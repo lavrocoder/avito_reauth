@@ -15,7 +15,7 @@ def start_driver(profile_path, cache_path, browser_file_path):
         return None
 
     options = Options()
-    options.binary_location = browser_file_path
+    options.binary_location = str(browser_file_path)
     options.add_argument(f"user-data-dir={profile_path}")
     options.add_argument("disk-cache-size=104857600")
     options.add_argument("media-cache-size=104857600")
