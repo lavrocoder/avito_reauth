@@ -28,6 +28,9 @@ def update_cookies(profile_id):
         raise Exception(f'Profile {profile_id} does not exist')
     profile_path = os.path.join(PROFILES_PATH, profile_id, 'profile')
     cache_path = os.path.join(PROFILES_PATH, profile_id, 'cache')
+    cookies_path = PROFILES_PATH / profile_id / 'cookies.json'
+    if cookies_path.exists():
+        os.remove(cookies_path)
 
     driver = start_driver(profile_path, cache_path, BROWSER_FILE_PATH)
     try:
@@ -54,6 +57,9 @@ def update_cookies(profile_id):
                 status = "ip ban"
         else:
             status = "not authorized"
+        if status == "ok":
+            with open(cookies_path, 'w', encoding='utf-8') as f:
+                f.write(cookies)
         return {"status": status, "cookies": cookies}
     finally:
         driver.close()
