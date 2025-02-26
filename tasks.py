@@ -59,7 +59,7 @@ def update_cookies(profile_id):
             status = "not authorized"
         if status == "ok":
             with open(cookies_path, 'w', encoding='utf-8') as f:
-                f.write(cookies)
+                f.write(json.dumps(cookies, indent=4, ensure_ascii=False))
         return {"status": status, "cookies": cookies}
     finally:
         driver.close()
