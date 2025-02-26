@@ -34,7 +34,9 @@ celery = Celery(
 #     return response
 
 static_folder = "cookies"
+profiles_folder = "profiles"
 app.mount("/cookies", StaticFiles(directory="cookies"), name="cookies")
+app.mount("/profiles", StaticFiles(directory="profiles"), name="profiles")
 
 
 @app.get("/cookies")
@@ -45,6 +47,22 @@ async def list_cookies():
         # Фильтруем только файлы (исключаем папки)
         files = [f for f in files if os.path.isfile(os.path.join(static_folder, f))]
         return JSONResponse(content={"files": files})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/working_cookies")
+async def working_cookies():
+    try:
+        data = []
+        dirs = [d for d in os.listdir(profiles_folder) if os.path.isdir(os.path.join(profiles_folder, d))]
+        for folder in dirs:
+            cookies_path = os.path.join(profiles_folder, folder, 'cookies.json')
+            if os.path.exists(cookies_path):
+                with open(cookies_path, 'r', encoding='utf-8') as f:
+                    cookies = json.load(f)
+                data.append({folder: cookies})
+        return JSONResponse(content={"cookies": data})
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 

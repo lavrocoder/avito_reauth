@@ -1,9 +1,10 @@
+# docker-compose up -d --build
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: fastapi_app
+    container_name: avito_reauth__fastapi_app
     ports:
       - "8000:8000"  # Пробрасываем порт для доступа к FastAPI
     depends_on:
@@ -16,7 +17,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: avito_reauth__redis
     ports:
       - "6379:6379"  # Пробрасываем порт для Redis (опционально)
     command: ["redis-server", "--appendonly", "yes"]  # Настройки Redis для сохранения данных
